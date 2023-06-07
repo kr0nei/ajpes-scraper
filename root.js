@@ -128,7 +128,7 @@ function exportData(data) {
 }
 const main = async () => {
   const browser = await puppeteer.launch({
-    headless: 'new',
+    headless: false,
     executablePath: puppeteer.executablePath()
   });
   const companies_urls = ["https://www.ajpes.si/podjetje/CALMO_d.o.o.?enota=231289&EnotaStatus=1#", "https://www.ajpes.si/podjetje/MOBI_-_COMP_SISTEMI_d.o.o.?enota=539737&EnotaStatus=1"];
@@ -137,13 +137,15 @@ const main = async () => {
     await loadCookie(page);
     for (let i = 0; i < companies_urls.length; i++) {
       await page.goto(companies_urls[i], { waitUntil: 'load' });
-      if (await page.cookies() == []) {
+      try{
         await page.click("[class='header-item login']", { waitUntil: 'load' });
         await page.click("[class='btn btn-default btn-lg btn-block']", { waitUntil: 'load' });
         await delay(Math.floor(Math.random() * 2500 + 1500));//Počakaj med 1,5 do 2,5 sekund
         await page.click("[class='btn btn-success']", { waitUntil: 'load' });
         await delay(Math.floor(Math.random() * 2500 + 1500));
         await saveCookie(page);
+      } catch (err){
+        console.log("IGNORE ERR: ",err);
       }
       const companyData = await getCompanyData(page, companies_urls[i]);
       dataToExport.push(companyData);
