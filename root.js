@@ -57,7 +57,6 @@ const getCompanyData = async (page, url) => {
       for (let i = 0; i < zastopniki.length; i++) {
         zastopnikiDat.push(zastopniki[i].getElementsByTagName('a')[0].innerHTML.replace("&nbsp;", " ").trim());
       }
-      // console.log(zastopnikiDat);
       return { "Zastopniki": zastopnikiDat };
     }
     function getTrrDat(document) {
@@ -74,7 +73,6 @@ const getCompanyData = async (page, url) => {
         trrDatEdited.push('-');
       }
       const znak = trrDatEdited.indexOf("-") + 1;
-      // return [trrDatEdited.length,znak];
       const trrDatObject = [];
       for (let i = 0; i < trrDatEdited.length; i = i + znak) {
         trrDatObject.push({
