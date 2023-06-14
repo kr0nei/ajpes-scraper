@@ -128,24 +128,28 @@ function exportData(data) {
 }
 const main = async () => {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: 'new',
     executablePath: puppeteer.executablePath()
   });
-  const companies_urls = ["https://www.ajpes.si/podjetje/CALMO_d.o.o.?enota=231289&EnotaStatus=1#", "https://www.ajpes.si/podjetje/MOBI_-_COMP_SISTEMI_d.o.o.?enota=539737&EnotaStatus=1"];
+  const companies_urls = ["https://www.ajpes.si/podjetje/CALMO_d.o.o.?enota=231289&EnotaStatus=1#", "https://www.ajpes.si/podjetje/MOBI_-_COMP_SISTEMI_d.o.o.?enota=539737&EnotaStatus=1", "https://www.ajpes.si/podjetje/PETROL_d.d.%2C_Ljubljana?enota=118936&EnotaStatus=1"];
   try {
     const page = await browser.newPage();
     await loadCookie(page);
     for (let i = 0; i < companies_urls.length; i++) {
       await page.goto(companies_urls[i], { waitUntil: 'load' });
-      try{
-        await page.click("[class='header-item login']", { waitUntil: 'load' });
-        await page.click("[class='btn btn-default btn-lg btn-block']", { waitUntil: 'load' });
-        await delay(Math.floor(Math.random() * 2500 + 1500));//Počakaj med 1,5 do 2,5 sekund
-        await page.click("[class='btn btn-success']", { waitUntil: 'load' });
-        await delay(Math.floor(Math.random() * 2500 + 1500));
-        await saveCookie(page);
-      } catch (err){
-        console.log("IGNORE ERR: ",err);
+      try {
+        if (i == 0) {
+          await page.click("[class='header-item login']", { waitUntil: 'load' });
+          await delay(Math.floor(Math.random() * 2500 + 1500));//Počakaj med 1,5 do 2,5 sekund
+          //div[@class='form-group form-group-lg']/button[contains(text(), 'Vstopi kot anonimni uporabnik')]
+          await page.click("[class='btn btn-default btn-lg btn-block']", { waitUntil: 'load' });
+          await delay(Math.floor(Math.random() * 2500 + 1500));
+          await page.click("[class='btn btn-success']", { waitUntil: 'load' });
+          await delay(Math.floor(Math.random() * 2500 + 1500));
+          await saveCookie(page);
+        }
+      } catch (err) {
+        console.log("IGNORE ERR: ", err);
       }
       const companyData = await getCompanyData(page, companies_urls[i]);
       dataToExport.push(companyData);
