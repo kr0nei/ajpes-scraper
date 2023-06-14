@@ -126,12 +126,17 @@ function exportData(data) {
   XLSX.writeFile(workbook, ime_datoteke);
   console.log(date.toLocaleTimeString(), " - Končano, vsi podatki izvoženi v podatki.xlsx");
 }
+function getURLsFromXLSXfile(filename) {
+  const workbook = XLSX.readFile(filename);
+  let urls = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { header: 1 });
+  return urls.map(url => url[0]);
+}
 const main = async () => {
   const browser = await puppeteer.launch({
     headless: 'new',
     executablePath: puppeteer.executablePath()
   });
-  const companies_urls = ["https://www.ajpes.si/podjetje/CALMO_d.o.o.?enota=231289&EnotaStatus=1#", "https://www.ajpes.si/podjetje/MOBI_-_COMP_SISTEMI_d.o.o.?enota=539737&EnotaStatus=1", "https://www.ajpes.si/podjetje/PETROL_d.d.%2C_Ljubljana?enota=118936&EnotaStatus=1"];
+  const companies_urls = getURLsFromXLSXfile("URLnaslovi.xlsx");
   try {
     const page = await browser.newPage();
     await loadCookie(page);
