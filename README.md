@@ -3,7 +3,7 @@ Follow the following steps to setup & install required tool to run the scraper
 
 ## Node JS
 Install node js from [nodejs.org](https://nodejs.org/en/download)
-
+All icons from 'Custom Setup' page should be selected.
 ## Getting the scraper and dependency installation
 ```bash
 npm init 'Ajpes scraper'
